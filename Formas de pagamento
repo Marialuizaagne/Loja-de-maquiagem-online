@@ -1,0 +1,71 @@
+class MetodoPagamento: 
+    """Classe base para métodos de pagamento."""
+    def pagar(self,  valor): 
+        raise NotImplementedError("Método 'pagar' deve ser implementado.")
+
+
+class CartaoCredito(MetodoPagamento): 
+    """Pagamento via cartão de crédito."""
+    def __init__(self,  numero,  titular,  validade,  cvv): 
+        self.numero = numero
+        self.titular = titular
+        self.validade = validade
+        self.cvv = cvv
+
+    def pagar(self,  valor): 
+        print(f"Processando pagamento de R${valor: .2f} com o cartão de crédito...")
+        # Simula a verificação do cartão
+        print("Pagamento aprovado!")
+
+
+class BoletoBancario(MetodoPagamento): 
+    """Pagamento via boleto bancário."""
+    def pagar(self,  valor): 
+        print(f"Gerando boleto no valor de R${valor: .2f}...")
+        print("Boleto gerado! Você tem 2 dias úteis para pagar.")
+
+
+class Pix(MetodoPagamento): 
+    """Pagamento via Pix."""
+    def __init__(self,  chave_pix): 
+        self.chave_pix = chave_pix
+
+    def pagar(self,  valor): 
+        print(f"Processando pagamento de R${valor: .2f} via Pix para a chave {self.chave_pix}...")
+        print("Pagamento realizado com sucesso!")
+
+
+def main(): 
+    print("Bem-vindo à loja de maquiagem online!")
+    print("Escolha o método de pagamento: ")
+    print("1. Cartão de Crédito")
+    print("2. Boleto Bancário")
+    print("3. Pix")
+
+    escolha = input("Digite o número da sua escolha:  ")
+
+    valor_compra = float(input("Digite o valor da sua compra:  R$ "))
+
+    if escolha == "1": 
+        numero = input("Digite o número do cartão:  ")
+        titular = input("Digite o nome do titular do cartão:  ")
+        validade = input("Digite a validade do cartão (MM/AA):  ")
+        cvv = input("Digite o CVV:  ")
+        pagamento = CartaoCredito(numero,  titular,  validade,  cvv)
+
+    elif escolha == "2": 
+        pagamento = BoletoBancario()
+
+    elif escolha == "3": 
+        chave_pix = input("Digite sua chave Pix:  ")
+        pagamento = Pix(chave_pix)
+
+    else: 
+        print("Método de pagamento inválido.")
+        return
+
+    pagamento.pagar(valor_compra)
+
+
+if __name__ == "__main__": 
+    main()
