@@ -1,0 +1,96 @@
+class Produto: 
+    """Classe para representar um produto."""
+    def __init__(self,  nome,  preco,  categoria): 
+        self.nome = nome
+        self.preco = preco
+        self.categoria = categoria
+
+    def exibir_informacoes(self): 
+        return f"Produto:  {self.nome} | Categoria:  {self.categoria} | Preço:  R${self.preco: .2f}"
+
+
+class Promocao: 
+    """Classe para representar uma promoção."""
+    def __init__(self,  descricao,  desconto_percentual): 
+        self.descricao = descricao
+        self.desconto_percentual = desconto_percentual
+
+    def aplicar_desconto(self,  preco_original): 
+        return preco_original * (1 - self.desconto_percentual / 100)
+
+    def exibir_descricao(self): 
+        return f"Promoção:  {self.descricao} | Desconto:  {self.desconto_percentual}%"
+
+
+class Loja: 
+    """Classe para representar a loja online."""
+    def __init__(self,  nome): 
+        self.nome = nome
+        self.produtos = []
+        self.promocoes = {}
+
+    def adicionar_produto(self,  produto): 
+        self.produtos.append(produto)
+
+    def adicionar_promocao(self,  categoria,  promocao): 
+        self.promocoes[categoria] = promocao
+
+    def listar_produtos(self): 
+        print("Produtos disponúsbeis: ")
+        for produto in self.produtos: 
+            print(produto.exibir_informacoes())
+
+    def listar_promocoes(self): 
+        print("Promoções disponúsbeis: ")
+        for categoria,  promocao in self.promocoes.items(): 
+            print(f"Categoria:  {categoria} | {promocao.exibir_descricao()}")
+
+    def calcular_preco_com_desconto(self,  produto): 
+        if produto.categoria in self.promocoes: 
+            promocao = self.promocoes[produto.categoria]
+            return promocao.aplicar_desconto(produto.preco)
+        return produto.preco
+
+    def exibir_preco_com_promocao(self): 
+        print("Preços com promoções aplicadas: ")
+        for produto in self.produtos: 
+            preco_promocional = self.calcular_preco_com_desconto(produto)
+            print(f"{produto.nome}:  R${preco_promocional: .2f} (Original:  R${produto.preco: .2f})")
+
+
+# Exemplo de uso
+def main(): 
+    loja = Loja("Loja de Maquiagem Online")
+
+    # Criando produtos
+    produto1 = Produto("Batom Matte",  29.90,  "Lábios")
+    produto2 = Produto("Base Líquida",  59.90,  "Rosto")
+    produto3 = Produto("Máscara de Cílios",  39.90,  "Olhos")
+    produto4 = Produto("Sombra Glitter",  19.90,  "Olhos")
+
+    # Adicionando produtos à loja
+    loja.adicionar_produto(produto1)
+    loja.adicionar_produto(produto2)
+    loja.adicionar_produto(produto3)
+    loja.adicionar_produto(produto4)
+
+    # Criando promoções
+    promocao_labios = Promocao("Desconto especial para lábios",  20)
+    promocao_olhos = Promocao("Promoção de olhos",  15)
+
+    # Adicionando promo��ões à loja
+    loja.adicionar_promocao("Lábios",  promocao_labios)
+    loja.adicionar_promocao("Olhos",  promocao_olhos)
+
+    # Listando produtos e promoções
+    loja.listar_produtos()
+    print("\n")
+    loja.listar_promocoes()
+    print("\n")
+
+    # Exibindo preços com promoções aplicadas
+    loja.exibir_preco_com_promocao()
+
+
+if __name__ == "__main__": 
+    main()
